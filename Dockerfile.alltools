@@ -3,8 +3,8 @@ ARG COMMIT=""
 ARG VERSION=""
 ARG BUILDNUM=""
 
-# Build Geth in a stock Go builder container
-FROM golang:1.18-alpine as builder
+# Build Yottaflux in a stock Go builder container
+FROM golang:1.19-alpine as builder
 
 RUN apk add --no-cache gcc musl-dev linux-headers git
 
@@ -22,7 +22,7 @@ FROM alpine:latest
 RUN apk add --no-cache ca-certificates
 COPY --from=builder /go-ethereum/build/bin/* /usr/local/bin/
 
-EXPOSE 8545 8546 30303 30303/udp
+EXPOSE 8645 8646 30403 30403/udp
 
 # Add some metadata labels to help programatic image consumption
 ARG COMMIT=""

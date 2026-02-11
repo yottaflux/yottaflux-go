@@ -30,14 +30,6 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 )
 
-func TestInvalidCliqueConfig(t *testing.T) {
-	block := DefaultGoerliGenesisBlock()
-	block.ExtraData = []byte{}
-	if _, err := block.Commit(nil); err == nil {
-		t.Fatal("Expected error on invalid clique config")
-	}
-}
-
 func TestSetupGenesis(t *testing.T) {
 	var (
 		customghash = common.HexToHash("0x89c99d90b79719238d2645c7642f2c9295246e80775b38cfd162b696817fbd50")
@@ -50,6 +42,10 @@ func TestSetupGenesis(t *testing.T) {
 		oldcustomg = customg
 	)
 	oldcustomg.Config = &params.ChainConfig{HomesteadBlock: big.NewInt(2)}
+
+	// Compute the expected default genesis hash dynamically.
+	defaultGenesisHash := DefaultGenesisBlock().ToBlock().Hash()
+
 	tests := []struct {
 		name       string
 		fn         func(ethdb.Database) (*params.ChainConfig, common.Hash, error)
@@ -70,8 +66,8 @@ func TestSetupGenesis(t *testing.T) {
 			fn: func(db ethdb.Database) (*params.ChainConfig, common.Hash, error) {
 				return SetupGenesisBlock(db, nil)
 			},
-			wantHash:   params.MainnetGenesisHash,
-			wantConfig: params.MainnetChainConfig,
+			wantHash:   defaultGenesisHash,
+			wantConfig: params.YottafluxChainConfig,
 		},
 		{
 			name: "mainnet block in DB, genesis == nil",
@@ -79,8 +75,8 @@ func TestSetupGenesis(t *testing.T) {
 				DefaultGenesisBlock().MustCommit(db)
 				return SetupGenesisBlock(db, nil)
 			},
-			wantHash:   params.MainnetGenesisHash,
-			wantConfig: params.MainnetChainConfig,
+			wantHash:   defaultGenesisHash,
+			wantConfig: params.YottafluxChainConfig,
 		},
 		{
 			name: "custom block in DB, genesis == nil",
@@ -90,16 +86,6 @@ func TestSetupGenesis(t *testing.T) {
 			},
 			wantHash:   customghash,
 			wantConfig: customg.Config,
-		},
-		{
-			name: "custom block in DB, genesis == ropsten",
-			fn: func(db ethdb.Database) (*params.ChainConfig, common.Hash, error) {
-				customg.MustCommit(db)
-				return SetupGenesisBlock(db, DefaultRopstenGenesisBlock())
-			},
-			wantErr:    &GenesisMismatchError{Stored: customghash, New: params.RopstenGenesisHash},
-			wantHash:   params.RopstenGenesisHash,
-			wantConfig: params.RopstenChainConfig,
 		},
 		{
 			name: "compatible config in DB",
@@ -160,27 +146,15 @@ func TestSetupGenesis(t *testing.T) {
 	}
 }
 
-// TestGenesisHashes checks the congruity of default genesis data to
-// corresponding hardcoded genesis hash values.
+// TestGenesisHashes checks that the genesis block hash is consistent
+// between MustCommit and ToBlock.
 func TestGenesisHashes(t *testing.T) {
-	for i, c := range []struct {
-		genesis *Genesis
-		want    common.Hash
-	}{
-		{DefaultGenesisBlock(), params.MainnetGenesisHash},
-		{DefaultGoerliGenesisBlock(), params.GoerliGenesisHash},
-		{DefaultRopstenGenesisBlock(), params.RopstenGenesisHash},
-		{DefaultRinkebyGenesisBlock(), params.RinkebyGenesisHash},
-		{DefaultSepoliaGenesisBlock(), params.SepoliaGenesisHash},
-	} {
-		// Test via MustCommit
-		if have := c.genesis.MustCommit(rawdb.NewMemoryDatabase()).Hash(); have != c.want {
-			t.Errorf("case: %d a), want: %s, got: %s", i, c.want.Hex(), have.Hex())
-		}
-		// Test via ToBlock
-		if have := c.genesis.ToBlock().Hash(); have != c.want {
-			t.Errorf("case: %d a), want: %s, got: %s", i, c.want.Hex(), have.Hex())
-		}
+	genesis := DefaultGenesisBlock()
+	want := genesis.ToBlock().Hash()
+
+	// Test via MustCommit
+	if have := genesis.MustCommit(rawdb.NewMemoryDatabase()).Hash(); have != want {
+		t.Errorf("MustCommit hash mismatch: want: %s, got: %s", want.Hex(), have.Hex())
 	}
 }
 

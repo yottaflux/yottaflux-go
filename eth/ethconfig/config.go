@@ -30,6 +30,7 @@ import (
 	"github.com/ethereum/go-ethereum/consensus/beacon"
 	"github.com/ethereum/go-ethereum/consensus/clique"
 	"github.com/ethereum/go-ethereum/consensus/ethash"
+	"github.com/ethereum/go-ethereum/consensus/progpow"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/eth/downloader"
 	"github.com/ethereum/go-ethereum/eth/gasprice"
@@ -72,7 +73,16 @@ var Defaults = Config{
 		DatasetsOnDisk:   2,
 		DatasetsLockMmap: false,
 	},
-	NetworkId:               1,
+	Progpow: progpow.Config{
+		CacheDir:         "progpow",
+		CachesInMem:      2,
+		CachesOnDisk:     3,
+		CachesLockMmap:   false,
+		DatasetsInMem:    1,
+		DatasetsOnDisk:   2,
+		DatasetsLockMmap: false,
+	},
+	NetworkId:               7847,
 	TxLookupLimit:           2350000,
 	LightPeers:              100,
 	UltraLightFraction:      75,
@@ -104,15 +114,19 @@ func init() {
 	}
 	if runtime.GOOS == "darwin" {
 		Defaults.Ethash.DatasetDir = filepath.Join(home, "Library", "Ethash")
+		Defaults.Progpow.DatasetDir = filepath.Join(home, "Library", "Progpow")
 	} else if runtime.GOOS == "windows" {
 		localappdata := os.Getenv("LOCALAPPDATA")
 		if localappdata != "" {
 			Defaults.Ethash.DatasetDir = filepath.Join(localappdata, "Ethash")
+			Defaults.Progpow.DatasetDir = filepath.Join(localappdata, "Progpow")
 		} else {
 			Defaults.Ethash.DatasetDir = filepath.Join(home, "AppData", "Local", "Ethash")
+			Defaults.Progpow.DatasetDir = filepath.Join(home, "AppData", "Local", "Progpow")
 		}
 	} else {
 		Defaults.Ethash.DatasetDir = filepath.Join(home, ".ethash")
+		Defaults.Progpow.DatasetDir = filepath.Join(home, ".progpow")
 	}
 }
 
@@ -177,6 +191,9 @@ type Config struct {
 	// Ethash options
 	Ethash ethash.Config
 
+	// ProgPow options
+	Progpow progpow.Config
+
 	// Transaction pool options
 	TxPool core.TxPoolConfig
 
@@ -214,6 +231,26 @@ type Config struct {
 
 // CreateConsensusEngine creates a consensus engine for the given chain configuration.
 func CreateConsensusEngine(stack *node.Node, chainConfig *params.ChainConfig, config *ethash.Config, notify []string, noverify bool, db ethdb.Database) consensus.Engine {
+	// If ProgPow is requested, set it up and return directly (no beacon wrapper)
+	if chainConfig.ProgPow != nil {
+		ppowCfg := Defaults.Progpow
+		if config != nil {
+			ppowCfg.PowMode = progpow.Mode(config.PowMode)
+			ppowCfg.CacheDir = stack.ResolvePath(ppowCfg.CacheDir)
+			ppowCfg.NotifyFull = config.NotifyFull
+		}
+		switch ppowCfg.PowMode {
+		case progpow.ModeFake:
+			log.Warn("ProgPow used in fake mode")
+		case progpow.ModeTest:
+			log.Warn("ProgPow used in test mode")
+		case progpow.ModeShared:
+			log.Warn("ProgPow used in shared mode")
+		}
+		engine := progpow.New(ppowCfg, notify, noverify)
+		engine.SetThreads(-1) // Disable CPU mining
+		return engine
+	}
 	// If proof-of-authority is requested, set it up
 	var engine consensus.Engine
 	if chainConfig.Clique != nil {

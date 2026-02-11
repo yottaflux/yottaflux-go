@@ -8,6 +8,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/consensus/ethash"
+	"github.com/ethereum/go-ethereum/consensus/progpow"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/eth/downloader"
 	"github.com/ethereum/go-ethereum/eth/gasprice"
@@ -50,6 +51,7 @@ func (c Config) MarshalTOML() (interface{}, error) {
 		Preimages                             bool
 		Miner                                 miner.Config
 		Ethash                                ethash.Config
+		Progpow                               progpow.Config
 		TxPool                                core.TxPoolConfig
 		GPO                                   gasprice.Config
 		EnablePreimageRecording               bool
@@ -95,6 +97,7 @@ func (c Config) MarshalTOML() (interface{}, error) {
 	enc.Preimages = c.Preimages
 	enc.Miner = c.Miner
 	enc.Ethash = c.Ethash
+	enc.Progpow = c.Progpow
 	enc.TxPool = c.TxPool
 	enc.GPO = c.GPO
 	enc.EnablePreimageRecording = c.EnablePreimageRecording
@@ -144,6 +147,7 @@ func (c *Config) UnmarshalTOML(unmarshal func(interface{}) error) error {
 		Preimages                             *bool
 		Miner                                 *miner.Config
 		Ethash                                *ethash.Config
+		Progpow                               *progpow.Config
 		TxPool                                *core.TxPoolConfig
 		GPO                                   *gasprice.Config
 		EnablePreimageRecording               *bool
@@ -255,6 +259,9 @@ func (c *Config) UnmarshalTOML(unmarshal func(interface{}) error) error {
 	}
 	if dec.Ethash != nil {
 		c.Ethash = *dec.Ethash
+	}
+	if dec.Progpow != nil {
+		c.Progpow = *dec.Progpow
 	}
 	if dec.TxPool != nil {
 		c.TxPool = *dec.TxPool

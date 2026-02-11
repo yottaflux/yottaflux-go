@@ -1,0 +1,44 @@
+version: "3.8"
+
+# Yottaflux local devnet: miner + RPC node
+# Usage: cd contrib && docker compose up -d --build
+# Smoke test: ./test-devnet.sh
+
+services:
+  miner:
+    build:
+      context: ..
+      dockerfile: contrib/Dockerfile
+    container_name: yottaflux-miner
+    environment:
+      NETWORK: mainnet
+      NETWORK_ID: "7847"
+      NODISCOVER: "true"
+      SYNC_MODE: full
+      EXTRA_FLAGS: "--mine --miner.threads=1 --miner.etherbase=0x0000000000000000000000000000000000000001 --allow-insecure-unlock"
+    ports:
+      - "30403:30403"
+    volumes:
+      - miner-data:/var/lib/yottaflux
+
+  rpc:
+    build:
+      context: ..
+      dockerfile: contrib/Dockerfile
+    container_name: yottaflux-rpc
+    environment:
+      NETWORK: mainnet
+      NETWORK_ID: "7847"
+      NODISCOVER: "true"
+      SYNC_MODE: full
+      ENABLE_RPC: "true"
+      HTTP_PORT: "8645"
+      HTTP_API: "eth,net,web3,txpool,debug"
+    ports:
+      - "8645:8645"
+    volumes:
+      - rpc-data:/var/lib/yottaflux
+
+volumes:
+  miner-data:
+  rpc-data:

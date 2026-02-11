@@ -34,9 +34,9 @@ const (
 	ETH67 = 67
 )
 
-// ProtocolName is the official short name of the `eth` protocol used during
+// ProtocolName is the official short name of the `yfx` protocol used during
 // devp2p capability negotiation.
-const ProtocolName = "eth"
+const ProtocolName = "yfx"
 
 // ProtocolVersions are the supported versions of the `eth` protocol (first
 // is primary).

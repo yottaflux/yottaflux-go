@@ -162,10 +162,16 @@ const (
 // Gas discount table for BLS12-381 G1 and G2 multi exponentiation operations
 var Bls12381MultiExpDiscountTable = [128]uint64{1200, 888, 764, 641, 594, 547, 500, 453, 438, 423, 408, 394, 379, 364, 349, 334, 330, 326, 322, 318, 314, 310, 306, 302, 298, 294, 289, 285, 281, 277, 273, 269, 268, 266, 265, 263, 262, 260, 259, 257, 256, 254, 253, 251, 250, 248, 247, 245, 244, 242, 241, 239, 238, 236, 235, 233, 232, 231, 229, 228, 226, 225, 223, 222, 221, 220, 219, 219, 218, 217, 216, 216, 215, 214, 213, 213, 212, 211, 211, 210, 209, 208, 208, 207, 206, 205, 205, 204, 203, 202, 202, 201, 200, 199, 199, 198, 197, 196, 196, 195, 194, 193, 193, 192, 191, 191, 190, 189, 188, 188, 187, 186, 185, 185, 184, 183, 182, 182, 181, 180, 179, 179, 178, 177, 176, 176, 175, 174}
 
+// Yottaflux tokenomics constants.
+var (
+	BlocksPerYear          = uint64(2_102_400)  // 365.25 * 86400 / 15 — blocks in one year at 15s intervals
+	EarlyMinerBonusEndBlock = uint64(150_000)   // Early miner 2x bonus ends at block 150,000
+	TailEmissionStartBlock = uint64(42_048_000) // 20 * BlocksPerYear — tail emission begins after 20 years
+)
+
 var (
 	DifficultyBoundDivisor = big.NewInt(2048)   // The bound divisor of the difficulty, used in the update calculations.
 	GenesisDifficulty      = big.NewInt(131072) // Difficulty of the Genesis block.
 	MinimumDifficulty      = big.NewInt(131072) // The minimum that the difficulty may ever be.
-	DurationLimit          = big.NewInt(13)     // The decision boundary on the blocktime duration used to determine whether difficulty should go up or not.
-	ETHWStartDifficulty    = big.NewInt(1_099_511_627_776) // The ETHW start difficulty(Reset difficulty).
+	DurationLimit          = big.NewInt(15)     // The decision boundary on the blocktime duration used to determine whether difficulty should go up or not.
 )
