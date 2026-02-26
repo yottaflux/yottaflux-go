@@ -79,9 +79,9 @@ func TestBlockchainWithProgpowFaker(t *testing.T) {
 
 	// Verify coinbase has received block rewards.
 	// Blocks 1-10 are all in early bonus period (2x) and year 1 (70% to miner).
-	// Per-block base reward = 4708 YFX * 2 (early bonus) = 9416 YFX
-	// Miner share = 9416 * 70% = 6591.2 YFX per block
-	// Total for 10 blocks = 65912 YFX
+	// Per-block base reward = 4708 YTX * 2 (early bonus) = 9416 YTX
+	// Miner share = 9416 * 70% = 6591.2 YTX per block
+	// Total for 10 blocks = 65912 YTX
 	statedb, err := chain.State()
 	if err != nil {
 		t.Fatalf("failed to get state: %v", err)
@@ -118,7 +118,7 @@ func TestTransactionLifecycle(t *testing.T) {
 	)
 
 	recipient := common.Address{0xaa}
-	transferAmount := big.NewInt(1000000000000000000) // 1 YFX
+	transferAmount := big.NewInt(1000000000000000000) // 1 YTX
 
 	// Create chain and insert blocks
 	chain, err := core.NewBlockChain(db, nil, params.YottafluxChainConfig, engine, vm.Config{}, nil, nil)
@@ -183,7 +183,7 @@ func TestEIP1559TransactionWithProgpow(t *testing.T) {
 	)
 
 	recipient := common.Address{0xbb}
-	transferAmount := big.NewInt(1000000000000000000) // 1 YFX
+	transferAmount := big.NewInt(1000000000000000000) // 1 YTX
 
 	chain, err := core.NewBlockChain(db, nil, params.YottafluxChainConfig, engine, vm.Config{}, nil, nil)
 	if err != nil {

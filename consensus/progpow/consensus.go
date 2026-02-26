@@ -41,11 +41,11 @@ import (
 
 // ProgPow proof-of-work protocol constants.
 var (
-	// InitialBlockReward is 4708 YFX in zaps (the base unit).
+	// InitialBlockReward is 4708 YTX in zaps (the base unit).
 	InitialBlockReward = new(big.Int).Mul(big.NewInt(4708), big.NewInt(params.Flux))
 
 	// TailEmissionPerBlock is the fixed per-block reward after 20 years.
-	// Total annual tail emission = 105,000,000 YFX; per-block = 105,000,000 / BlocksPerYear ≈ 49.93 YFX.
+	// Total annual tail emission = 105,000,000 YTX; per-block = 105,000,000 / BlocksPerYear ≈ 49.93 YTX.
 	TailEmissionPerBlock = new(big.Int).Div(
 		new(big.Int).Mul(big.NewInt(105_000_000), big.NewInt(params.Flux)),
 		new(big.Int).SetUint64(params.BlocksPerYear),
@@ -65,7 +65,7 @@ var (
 	big100 = big.NewInt(100)
 
 	// BlockReward is kept as an alias for backward compatibility in tests.
-	// It now returns the initial block reward (4708 YFX).
+	// It now returns the initial block reward (4708 YTX).
 	BlockReward = InitialBlockReward
 
 	maxUncles                     = 2     // Maximum number of uncles allowed in a single block
@@ -500,7 +500,7 @@ var (
 func CalcBlockReward(blockNumber *big.Int) *big.Int {
 	blockNum := blockNumber.Uint64()
 
-	// Tail emission: fixed ~49.93 YFX/block after 20 years
+	// Tail emission: fixed ~49.93 YTX/block after 20 years
 	if blockNum >= params.TailEmissionStartBlock {
 		return new(big.Int).Set(TailEmissionPerBlock)
 	}

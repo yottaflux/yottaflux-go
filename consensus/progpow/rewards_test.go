@@ -39,7 +39,7 @@ func TestCalcBlockReward(t *testing.T) {
 		{
 			name:     "block 0 (early bonus)",
 			blockNum: 0,
-			// 4708 * 2 = 9416 YFX
+			// 4708 * 2 = 9416 YTX
 			expected: new(big.Int).Mul(big.NewInt(9416), flux),
 		},
 		{
@@ -55,7 +55,7 @@ func TestCalcBlockReward(t *testing.T) {
 		{
 			name:     "block 150000 (first non-early-bonus block, still year 1 era 0)",
 			blockNum: 150000,
-			// 4708 YFX (no 2x bonus, no halving yet)
+			// 4708 YTX (no 2x bonus, no halving yet)
 			expected: new(big.Int).Mul(big.NewInt(4708), flux),
 		},
 		{
@@ -66,13 +66,13 @@ func TestCalcBlockReward(t *testing.T) {
 		{
 			name:     "block 2102400 (first block of year 2, era 1 = first halving)",
 			blockNum: 2102400,
-			// 4708 / 2 = 2354 YFX
+			// 4708 / 2 = 2354 YTX
 			expected: new(big.Int).Mul(big.NewInt(2354), flux),
 		},
 		{
 			name:     "block 4204800 (year 3, era 2 = second halving)",
 			blockNum: 4204800,
-			// 4708 / 4 = 1177 YFX
+			// 4708 / 4 = 1177 YTX
 			expected: new(big.Int).Mul(big.NewInt(1177), flux),
 		},
 		{
