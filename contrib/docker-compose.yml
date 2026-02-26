@@ -14,7 +14,6 @@ services:
       NETWORK: mainnet
       NETWORK_ID: "7847"
       NODISCOVER: "true"
-      SYNC_MODE: full
       EXTRA_FLAGS: "--mine --miner.threads=1 --miner.etherbase=0x0000000000000000000000000000000000000001 --allow-insecure-unlock"
     ports:
       - "30403:30403"
@@ -30,12 +29,11 @@ services:
       NETWORK: mainnet
       NETWORK_ID: "7847"
       NODISCOVER: "true"
-      SYNC_MODE: full
       ENABLE_RPC: "true"
       HTTP_PORT: "8645"
-      HTTP_API: "eth,net,web3,txpool,debug"
     ports:
       - "8645:8645"
+      - "8646:8646"
     volumes:
       - rpc-data:/var/lib/yottaflux
 

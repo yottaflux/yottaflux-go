@@ -37,20 +37,21 @@ fi
 SEED_FLAGS="$SEED_FLAGS --port=${P2P_PORT:-30403}"
 SEED_FLAGS="$SEED_FLAGS --maxpeers=${MAX_PEERS:-100}"
 SEED_FLAGS="$SEED_FLAGS --nat=${NAT:-any}"
-SEED_FLAGS="$SEED_FLAGS --syncmode=${SYNC_MODE:-snap}"
+SEED_FLAGS="$SEED_FLAGS --syncmode=${SYNC_MODE:-full}"
+SEED_FLAGS="$SEED_FLAGS --gcmode=${GC_MODE:-archive}"
 
 # Enable HTTP RPC if requested (off by default for security)
 if [ "${ENABLE_RPC:-false}" = "true" ]; then
     SEED_FLAGS="$SEED_FLAGS --http"
     SEED_FLAGS="$SEED_FLAGS --http.addr=0.0.0.0"
     SEED_FLAGS="$SEED_FLAGS --http.port=${HTTP_PORT:-8645}"
-    SEED_FLAGS="$SEED_FLAGS --http.api=${HTTP_API:-eth,net,web3}"
+    SEED_FLAGS="$SEED_FLAGS --http.api=${HTTP_API:-eth,net,web3,txpool,debug}"
     SEED_FLAGS="$SEED_FLAGS --http.vhosts=${HTTP_VHOSTS:-*}"
     SEED_FLAGS="$SEED_FLAGS --http.corsdomain=${HTTP_CORS:-*}"
 fi
 
-# Enable WebSocket if requested
-if [ "${ENABLE_WS:-false}" = "true" ]; then
+# Enable WebSocket (on by default for Blockscout newHeads subscription)
+if [ "${ENABLE_WS:-true}" = "true" ]; then
     SEED_FLAGS="$SEED_FLAGS --ws"
     SEED_FLAGS="$SEED_FLAGS --ws.addr=0.0.0.0"
     SEED_FLAGS="$SEED_FLAGS --ws.port=${WS_PORT:-8646}"
