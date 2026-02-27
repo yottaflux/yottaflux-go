@@ -38,7 +38,7 @@ const (
 //
 // and paste the full enode:// URL here.
 var MainnetBootnodes = []string{
-	// "enode://<pubkey>@seed.yottaflux.ai:30403",
+	// Mainnet seed nodes not yet deployed.
 }
 
 // YottafluxTestnetBootnodes are the enode URLs of the P2P bootstrap nodes
@@ -50,7 +50,10 @@ var MainnetBootnodes = []string{
 //
 // and paste the full enode:// URL here.
 var YottafluxTestnetBootnodes = []string{
-	// "enode://<pubkey>@seed-test.yottaflux.ai:30403",
+	"enode://c7013c65beab0806791dc343dc4a9a127137316b0cc0c08bbc022fdb51f7e6210ca6209019fa64492581b5382d4817bf1df87c1716dcf99ea889fe5cc6b6dfb4@us-east-1a-seed-test.yottaflux.ai:30403",
+	"enode://efe30d50875873b21bb9fadd64650c4264bbbd8ff76acf6e1498d82954386d4ba6614b0cc5f7707ed927f1d5240ad65b181f9bd1d7cdbaa55a5334b677ba8234@us-east-1b-seed-test.yottaflux.ai:30403",
+	"enode://36470c6ee08fa2016e251aaebd1eddfd06a057a9b55defe7de0f582b8d8e7f7463b22b81ba488a68cd056cfde251892f1961015d62cfb170182ff16ca4f505fa@us-west-1a-seed-test.yottaflux.ai:30403",
+	"enode://53a5c2235de5916c805b6b779cae15db9d5b416632f48be5c3373603f0294875d19de7d67019ef39a9b4795cb2d6409bcdbc5af43cc8f6e0ac54bc954f487822@us-west-1c-seed-test.yottaflux.ai:30403",
 }
 
 // RopstenBootnodes are the enode URLs of the P2P bootstrap nodes running on the

@@ -2,7 +2,8 @@
 set -e
 
 DATADIR="/var/lib/yottaflux"
-GENESIS="/etc/yottaflux/genesis.json"
+GENESIS_MAINNET="/etc/yottaflux/genesis.json"
+GENESIS_TESTNET="/etc/yottaflux/genesis_testnet.json"
 
 # Network mode: "mainnet" (default) or "testnet"
 NETWORK="${NETWORK:-mainnet}"
@@ -14,9 +15,9 @@ NETWORK="${NETWORK:-mainnet}"
 if [ ! -d "$DATADIR/yottaflux/chaindata" ]; then
     echo "First run detected ($NETWORK) — initializing genesis..."
     if [ "$NETWORK" = "testnet" ]; then
-        yottaflux --testnet --datadir "$DATADIR" init "$GENESIS"
+        yottaflux --testnet --datadir "$DATADIR" init "$GENESIS_TESTNET"
     else
-        yottaflux --datadir "$DATADIR" init "$GENESIS"
+        yottaflux --datadir "$DATADIR" init "$GENESIS_MAINNET"
     fi
     echo "Genesis initialized."
 fi
@@ -45,7 +46,7 @@ if [ "${ENABLE_RPC:-false}" = "true" ]; then
     SEED_FLAGS="$SEED_FLAGS --http"
     SEED_FLAGS="$SEED_FLAGS --http.addr=0.0.0.0"
     SEED_FLAGS="$SEED_FLAGS --http.port=${HTTP_PORT:-8645}"
-    SEED_FLAGS="$SEED_FLAGS --http.api=${HTTP_API:-eth,net,web3,txpool,debug}"
+    SEED_FLAGS="$SEED_FLAGS --http.api=${HTTP_API:-eth,net,web3,txpool}"
     SEED_FLAGS="$SEED_FLAGS --http.vhosts=${HTTP_VHOSTS:-*}"
     SEED_FLAGS="$SEED_FLAGS --http.corsdomain=${HTTP_CORS:-*}"
 fi

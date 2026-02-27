@@ -1,0 +1,28 @@
+{
+  "config": {
+    "chainId": 7848,
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "muirGlacierBlock": 0,
+    "berlinBlock": 0,
+    "londonBlock": 0,
+    "progpow": {
+      "devFundAddress": "0x0000000000000000000000000000000000000000",
+      "communityFundAddress": "0x0000000000000000000000000000000000000000",
+      "stakerFundAddress": "0x0000000000000000000000000000000000000000"
+    }
+  },
+  "difficulty": "0x20000",
+  "gasLimit": "0x1C9C380",
+  "alloc": {},
+  "nonce": "0x0000000000000042",
+  "timestamp": "0x0",
+  "extraData": "0x596f747461666c757820546573746e65742047656e65736973",
+  "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+}

@@ -26,6 +26,7 @@ RUN adduser -D -h /home/yottaflux yottaflux && \
 # Copy binary and genesis
 COPY --from=builder /go-ethereum/build/bin/yottaflux /usr/local/bin/yottaflux
 COPY genesis_yottaflux.json /etc/yottaflux/genesis.json
+COPY genesis_yottaflux_testnet.json /etc/yottaflux/genesis_testnet.json
 
 # Copy and install entrypoint
 COPY contrib/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
